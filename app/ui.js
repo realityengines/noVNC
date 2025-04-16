@@ -559,7 +559,7 @@ const UI = {
         UI.closeAllPanels();
         document.getElementById('noVNC_control_bar')
             .classList.remove("noVNC_open");
-        UI.rfb.focus();
+        //UI.rfb.focus();
     },
 
     toggleControlbar() {
@@ -1150,7 +1150,7 @@ const UI = {
         UI.updateVisualState('connected');
 
         // Do this last because it can only be used on rendered elements
-        UI.rfb.focus();
+        //UI.rfb.focus();
     },
 
     disconnectFinished(e) {
@@ -1262,8 +1262,8 @@ const UI = {
         document.getElementById('noVNC_credentials_dlg')
             .classList.add('noVNC_open');
 
-        setTimeout(() => document
-            .getElementById(inputFocus).focus(), 100);
+        // setTimeout(() => document
+        //     .getElementById(inputFocus).focus(), 100);
 
         Log.Warn("Server asked for credentials");
         UI.showStatus(_("Credentials are required"), "warning");
@@ -1470,7 +1470,7 @@ const UI = {
 
         if (document.activeElement == input) return;
 
-        input.focus();
+        //input.focus();
 
         try {
             const l = input.value.length;
@@ -1697,7 +1697,7 @@ const UI = {
     sendCtrlAltDel() {
         UI.rfb.sendCtrlAltDel();
         // See below
-        UI.rfb.focus();
+        //UI.rfb.focus();
         UI.idleControlbar();
     },
 
@@ -1712,9 +1712,9 @@ const UI = {
         // element instead.
         if (document.getElementById('noVNC_keyboard_button')
             .classList.contains("noVNC_selected")) {
-            document.getElementById('noVNC_keyboardinput').focus();
+            //document.getElementById('noVNC_keyboardinput').focus();
         } else {
-            UI.rfb.focus();
+            //UI.rfb.focus();
         }
         // fade out the controlbar to highlight that
         // the focus has been moved to the screen
