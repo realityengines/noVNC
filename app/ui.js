@@ -111,7 +111,7 @@ const UI = {
             UI.toggleControlbarSide();
         }
 
-        UI.initFullscreen();
+        // UI.initFullscreen();
 
         // Setup event handlers
         UI.addControlbarHandlers();
