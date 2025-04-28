@@ -144,19 +144,19 @@ const UI = {
         }
     },
 
-    initFullscreen() {
-        // Only show the button if fullscreen is properly supported
-        // * Safari doesn't support alphanumerical input while in fullscreen
-        if (!isSafari() &&
-            (document.documentElement.requestFullscreen ||
-             document.documentElement.mozRequestFullScreen ||
-             document.documentElement.webkitRequestFullscreen ||
-             document.body.msRequestFullscreen)) {
-            document.getElementById('noVNC_fullscreen_button')
-                .classList.remove("noVNC_hidden");
-            UI.addFullscreenHandlers();
-        }
-    },
+    // initFullscreen() {
+    //     // Only show the button if fullscreen is properly supported
+    //     // * Safari doesn't support alphanumerical input while in fullscreen
+    //     if (!isSafari() &&
+    //         (document.documentElement.requestFullscreen ||
+    //          document.documentElement.mozRequestFullScreen ||
+    //          document.documentElement.webkitRequestFullscreen ||
+    //          document.body.msRequestFullscreen)) {
+    //         document.getElementById('noVNC_fullscreen_button')
+    //             .classList.remove("noVNC_hidden");
+    //         UI.addFullscreenHandlers();
+    //     }
+    // },
 
     initSettings() {
         // Logging selection dropdown
@@ -381,15 +381,15 @@ const UI = {
         UI.addSettingChangeHandler('reconnect_delay');
     },
 
-    addFullscreenHandlers() {
-        document.getElementById("noVNC_fullscreen_button")
-            .addEventListener('click', UI.toggleFullscreen);
+    // addFullscreenHandlers() {
+    //     document.getElementById("noVNC_fullscreen_button")
+    //         .addEventListener('click', UI.toggleFullscreen);
 
-        window.addEventListener('fullscreenchange', UI.updateFullscreenButton);
-        window.addEventListener('mozfullscreenchange', UI.updateFullscreenButton);
-        window.addEventListener('webkitfullscreenchange', UI.updateFullscreenButton);
-        window.addEventListener('msfullscreenchange', UI.updateFullscreenButton);
-    },
+    //     window.addEventListener('fullscreenchange', UI.updateFullscreenButton);
+    //     window.addEventListener('mozfullscreenchange', UI.updateFullscreenButton);
+    //     window.addEventListener('webkitfullscreenchange', UI.updateFullscreenButton);
+    //     window.addEventListener('msfullscreenchange', UI.updateFullscreenButton);
+    // },
 
 /* ------^-------
  * /EVENT HANDLERS
@@ -1293,46 +1293,46 @@ const UI = {
  *   FULLSCREEN
  * ------v------*/
 
-    toggleFullscreen() {
-        if (document.fullscreenElement || // alternative standard method
-            document.mozFullScreenElement || // currently working methods
-            document.webkitFullscreenElement ||
-            document.msFullscreenElement) {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-        } else {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) {
-                document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) {
-                document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            } else if (document.body.msRequestFullscreen) {
-                document.body.msRequestFullscreen();
-            }
-        }
-        UI.updateFullscreenButton();
-    },
+    // toggleFullscreen() {
+    //     if (document.fullscreenElement || // alternative standard method
+    //         document.mozFullScreenElement || // currently working methods
+    //         document.webkitFullscreenElement ||
+    //         document.msFullscreenElement) {
+    //         if (document.exitFullscreen) {
+    //             document.exitFullscreen();
+    //         } else if (document.mozCancelFullScreen) {
+    //             document.mozCancelFullScreen();
+    //         } else if (document.webkitExitFullscreen) {
+    //             document.webkitExitFullscreen();
+    //         } else if (document.msExitFullscreen) {
+    //             document.msExitFullscreen();
+    //         }
+    //     } else {
+    //         if (document.documentElement.requestFullscreen) {
+    //             document.documentElement.requestFullscreen();
+    //         } else if (document.documentElement.mozRequestFullScreen) {
+    //             document.documentElement.mozRequestFullScreen();
+    //         } else if (document.documentElement.webkitRequestFullscreen) {
+    //             document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+    //         } else if (document.body.msRequestFullscreen) {
+    //             document.body.msRequestFullscreen();
+    //         }
+    //     }
+    //     UI.updateFullscreenButton();
+    // },
 
-    updateFullscreenButton() {
-        if (document.fullscreenElement || // alternative standard method
-            document.mozFullScreenElement || // currently working methods
-            document.webkitFullscreenElement ||
-            document.msFullscreenElement ) {
-            document.getElementById('noVNC_fullscreen_button')
-                .classList.add("noVNC_selected");
-        } else {
-            document.getElementById('noVNC_fullscreen_button')
-                .classList.remove("noVNC_selected");
-        }
-    },
+    // updateFullscreenButton() {
+    //     if (document.fullscreenElement || // alternative standard method
+    //         document.mozFullScreenElement || // currently working methods
+    //         document.webkitFullscreenElement ||
+    //         document.msFullscreenElement ) {
+    //         document.getElementById('noVNC_fullscreen_button')
+    //             .classList.add("noVNC_selected");
+    //     } else {
+    //         document.getElementById('noVNC_fullscreen_button')
+    //             .classList.remove("noVNC_selected");
+    //     }
+    // },
 
 /* ------^-------
  *  /FULLSCREEN
