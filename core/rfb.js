@@ -155,6 +155,7 @@ export default class RFB extends EventTargetMixin {
         this._clipboardText = null;
         this._clipboardServerCapabilitiesActions = {};
         this._clipboardServerCapabilitiesFormats = {};
+        this._pendingPaste = false;
 
         // Internal objects
         this._sock = null;              // Websock object
@@ -206,6 +207,8 @@ export default class RFB extends EventTargetMixin {
             handleGesture: this._handleGesture.bind(this),
             handleRSAAESCredentialsRequired: this._handleRSAAESCredentialsRequired.bind(this),
             handleRSAAESServerVerification: this._handleRSAAESServerVerification.bind(this),
+            handlePaste: this._handlePaste.bind(this),
+            handleWindowMessage: this._handleWindowMessage.bind(this),
         };
 
         // main setup
@@ -584,6 +587,10 @@ export default class RFB extends EventTargetMixin {
         this._canvas.addEventListener("mousedown", this._eventHandlers.focusCanvas);
         this._canvas.addEventListener("touchstart", this._eventHandlers.focusCanvas);
 
+        // Clipboard: listen for paste on canvas and postMessage from parent frame
+        this._canvas.addEventListener("paste", this._eventHandlers.handlePaste);
+        window.addEventListener("message", this._eventHandlers.handleWindowMessage);
+
         // Mouse events
         this._canvas.addEventListener('mousedown', this._eventHandlers.handleMouse);
         this._canvas.addEventListener('mouseup', this._eventHandlers.handleMouse);
@@ -619,6 +626,8 @@ export default class RFB extends EventTargetMixin {
         this._canvas.removeEventListener('contextmenu', this._eventHandlers.handleMouse);
         this._canvas.removeEventListener("mousedown", this._eventHandlers.focusCanvas);
         this._canvas.removeEventListener("touchstart", this._eventHandlers.focusCanvas);
+        this._canvas.removeEventListener("paste", this._eventHandlers.handlePaste);
+        window.removeEventListener("message", this._eventHandlers.handleWindowMessage);
         this._resizeObserver.disconnect();
         this._keyboard.ungrab();
         this._gestures.detach();
@@ -696,6 +705,55 @@ export default class RFB extends EventTargetMixin {
         }
 
         this.focus({ preventScroll: true });
+    }
+
+    _pasteText(text) {
+        if (this._rfbConnectionState !== 'connected' || this._viewOnly) { return; }
+        if (!text) { return; }
+
+        this.clipboardPasteFrom(text);
+
+        const usesExtendedClipboard =
+            this._clipboardServerCapabilitiesFormats[extendedClipboardFormatText] &&
+            this._clipboardServerCapabilitiesActions[extendedClipboardActionNotify];
+
+        if (usesExtendedClipboard) {
+            this._pendingPaste = true;
+        } else {
+            this._sendPasteKeyCombo();
+        }
+    }
+
+    _sendPasteKeyCombo() {
+        this.sendKey(KeyTable.XK_Control_L, "ControlLeft", true);
+        this.sendKey(0x0076, "KeyV", true);
+        this.sendKey(0x0076, "KeyV", false);
+        this.sendKey(KeyTable.XK_Control_L, "ControlLeft", false);
+    }
+
+    _handlePaste(e) {
+        const text = e.clipboardData.getData('text/plain');
+        if (text) {
+            this._pasteText(text);
+        }
+        e.preventDefault();
+    }
+
+    _handleWindowMessage(e) {
+        if (!e.data || e.data.type !== 'noVNC-clipboard-paste') { return; }
+        if (typeof e.data.text === 'string') {
+            this._pasteText(e.data.text);
+        }
+    }
+
+    _clipboardToBrowser(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).catch(() => {});
+        }
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage(
+                { type: 'noVNC-clipboard-copy', text: text }, '*');
+        }
     }
 
     _setDesktopName(name) {
@@ -2231,6 +2289,7 @@ export default class RFB extends EventTargetMixin {
             this.dispatchEvent(new CustomEvent(
                 "clipboard",
                 { detail: { text: text } }));
+            this._clipboardToBrowser(text);
 
         } else {
             //Extended msg.
@@ -2286,6 +2345,11 @@ export default class RFB extends EventTargetMixin {
                     if (formats & extendedClipboardFormatText) {
                         RFB.messages.extendedClipboardProvide(this._sock, [extendedClipboardFormatText], [this._clipboardText]);
                     }
+                }
+
+                if (this._pendingPaste) {
+                    this._pendingPaste = false;
+                    this._sendPasteKeyCombo();
                 }
 
             } else if (actions === extendedClipboardActionPeek) {
@@ -2369,6 +2433,7 @@ export default class RFB extends EventTargetMixin {
                     this.dispatchEvent(new CustomEvent(
                         "clipboard",
                         { detail: { text: textData } }));
+                    this._clipboardToBrowser(textData);
                 }
             } else {
                 return this._fail("Unexpected action in extended clipboard message: " + actions);
