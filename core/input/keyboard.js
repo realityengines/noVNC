@@ -85,6 +85,13 @@ export default class Keyboard {
     }
 
     _handleKeyDown(e) {
+        // Let browser handle paste shortcuts so the paste event fires on the canvas.
+        // rfb.js listens for the paste event to bridge browser clipboard → VNC.
+        if ((e.key === 'v' || e.key === 'V') &&
+            ((browser.isMac() || browser.isIOS()) ? e.metaKey : e.ctrlKey)) {
+            return;
+        }
+
         const code = this._getKeyCode(e);
         let keysym = KeyboardUtil.getKeysym(e);
         let numlock = e.getModifierState('NumLock');
