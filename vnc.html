@@ -378,5 +378,30 @@
         <source src="app/sounds/bell.oga" type="audio/ogg">
         <source src="app/sounds/bell.mp3" type="audio/mpeg">
     </audio>
+
+    <script>
+    // Mac Cmd -> Ctrl remap. Rewrites keydown/keyup at document level in capture
+    // phase, so noVNC's keyboard handler reads ctrlKey:true instead of metaKey:true.
+    // Only activates on Mac/iOS; no-op on Windows/Linux/ChromeOS/Android.
+    (function() {
+        var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+        if (!isMac) return;
+        function remapMeta(e) {
+            if (e.code === 'MetaLeft' || e.code === 'MetaRight') {
+                Object.defineProperty(e, 'code',    {value: e.code.replace('Meta', 'Control')});
+                Object.defineProperty(e, 'key',     {value: 'Control'});
+                Object.defineProperty(e, 'keyCode', {value: 17});
+                Object.defineProperty(e, 'metaKey', {value: false});
+                Object.defineProperty(e, 'ctrlKey', {value: true});
+            } else if (e.metaKey && !e.ctrlKey) {
+                Object.defineProperty(e, 'metaKey', {value: false});
+                Object.defineProperty(e, 'ctrlKey', {value: true});
+                e.preventDefault();
+            }
+        }
+        document.addEventListener('keydown', remapMeta, true);
+        document.addEventListener('keyup',   remapMeta, true);
+    })();
+    </script>
  </body>
 </html>
