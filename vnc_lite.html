@@ -20,37 +20,83 @@
 
         body {
             margin: 0;
-            background-color: dimgrey;
+            background: #0f1113;
             height: 100%;
             display: flex;
             flex-direction: column;
+            color: #f7fafc;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+                         BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
         html {
             height: 100%;
         }
 
         #top_bar {
-            background-color: #6e84a3;
+            position: relative;
+            z-index: 1;
+            min-height: 48px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: rgba(22, 25, 27, 0.94);
             color: white;
-            font: bold 12px Helvetica;
-            padding: 6px 5px 4px 5px;
-            border-bottom: 1px outset;
+            font-size: 13px;
+            font-weight: 650;
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(18px) saturate(1.15);
         }
         #status {
             text-align: center;
+            line-height: 1.35;
         }
         #sendCtrlAltDelButton {
-            position: fixed;
-            top: 0px;
-            right: 0px;
-            border: 1px outset;
-            padding: 5px 5px 4px 5px;
+            position: absolute;
+            top: 7px;
+            right: 8px;
+            min-height: 34px;
+            box-sizing: border-box;
+            border: 1px solid rgba(45, 212, 191, 0.36);
+            border-radius: 8px;
+            padding: 8px 12px;
+            background: rgba(45, 212, 191, 0.12);
+            color: #ecfeff;
             cursor: pointer;
+            transition: background 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                        transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                        border-color 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        #sendCtrlAltDelButton:hover {
+            background: rgba(45, 212, 191, 0.20);
+            border-color: rgba(45, 212, 191, 0.64);
+        }
+        #sendCtrlAltDelButton:active {
+            transform: translateY(1px);
         }
 
         #screen {
             flex: 1; /* fill remaining space */
             overflow: hidden;
+            background: #0f1113;
+        }
+
+        @media (max-width: 520px) {
+            #top_bar {
+                min-height: 84px;
+                align-items: flex-start;
+                padding: 10px 12px;
+            }
+            #sendCtrlAltDelButton {
+                top: auto;
+                right: 12px;
+                bottom: 10px;
+                left: 12px;
+                text-align: center;
+            }
         }
 
     </style>
@@ -171,7 +217,7 @@
 <body>
     <div id="top_bar">
         <div id="status">Loading</div>
-        <div id="sendCtrlAltDelButton">Send CtrlAltDel</div>
+        <div id="sendCtrlAltDelButton">Send Ctrl+Alt+Del</div>
     </div>
     <div id="screen">
         <!-- This is where the remote screen will appear -->

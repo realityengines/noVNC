@@ -30,22 +30,41 @@
  */
 
 :root {
-  font-family: sans-serif;
-}
-
-body {
-  margin:0;
-  padding:0;
-  /*Background image with light grey curve.*/
-  background-color:#494949;
-  background-repeat:no-repeat;
-  background-position:right bottom;
-  height:100%;
-  touch-action: none;
+  color-scheme: dark light;
+  --noVNC-surface: rgba(22, 25, 27, 0.94);
+  --noVNC-surface-elevated: rgba(255, 255, 255, 0.96);
+  --noVNC-surface-muted: #eef3f7;
+  --noVNC-border: rgba(255, 255, 255, 0.16);
+  --noVNC-border-strong: rgba(18, 24, 28, 0.14);
+  --noVNC-text: #f7fafc;
+  --noVNC-text-strong: #101820;
+  --noVNC-text-muted: #5b6773;
+  --noVNC-accent: #2dd4bf;
+  --noVNC-accent-strong: #0f766e;
+  --noVNC-success: #21c55d;
+  --noVNC-warning: #d97706;
+  --noVNC-error: #dc2626;
+  --noVNC-shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.18);
+  --noVNC-shadow-md: 0 18px 48px rgba(0, 0, 0, 0.30);
+  --noVNC-radius: 8px;
+  --noVNC-motion: 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", sans-serif;
+  background: #111416;
 }
 
 html {
-  height:100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+  background: #111416;
+  color: var(--noVNC-text);
+  touch-action: none;
 }
 
 .noVNC_only_touch.noVNC_hidden {
@@ -53,7 +72,7 @@ html {
 }
 
 .noVNC_disabled {
-  color: rgb(128, 128, 128);
+  color: rgba(91, 103, 115, 0.75);
 }
 
 /* ----------------------------------------
@@ -67,9 +86,9 @@ html {
 .noVNC_spinner, .noVNC_spinner::before, .noVNC_spinner::after {
   width: 10px;
   height: 10px;
-  border-radius: 2px;
-  box-shadow: -60px 10px 0 rgba(255, 255, 255, 0);
-  animation: noVNC_spinner 1.0s linear infinite;
+  border-radius: 50%;
+  box-shadow: -60px 10px 0 rgba(45, 212, 191, 0);
+  animation: noVNC_spinner 1.0s ease-in-out infinite;
 }
 .noVNC_spinner::before {
   content: "";
@@ -86,9 +105,9 @@ html {
   animation-delay: 0.1s;
 }
 @keyframes noVNC_spinner {
-  0% { box-shadow: -60px 10px 0 rgba(255, 255, 255, 0); width: 20px; }
-  25% { box-shadow: 20px 10px 0 rgba(255, 255, 255, 1); width: 10px; }
-  50% { box-shadow: 60px 10px 0 rgba(255, 255, 255, 0); width: 10px; }
+  0% { box-shadow: -60px 10px 0 rgba(45, 212, 191, 0); width: 20px; }
+  25% { box-shadow: 20px 10px 0 rgba(45, 212, 191, 1); width: 10px; }
+  50% { box-shadow: 60px 10px 0 rgba(45, 212, 191, 0); width: 10px; }
 }
 
 /* ----------------------------------------
@@ -112,6 +131,7 @@ html {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 60;
 }
 .noVNC_center > * {
   pointer-events: auto;
@@ -165,21 +185,22 @@ html {
 
   padding: 15px;
 
-  transition: 0.5s ease-in-out;
+  transition: transform var(--noVNC-motion), opacity var(--noVNC-motion);
 
-  transform: translateY(-50px);
+  transform: translateY(-18px) scale(0.98);
   opacity: 0;
 
   text-align: center;
   font-weight: bold;
   color: #fff;
 
-  border-radius: 10px;
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
-  background: rgba(200,55,55,0.8);
+  border-radius: var(--noVNC-radius);
+  box-shadow: var(--noVNC-shadow-md);
+  background: rgba(127, 29, 29, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 #noVNC_fallback_error.noVNC_open > div {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   opacity: 1;
 }
 
@@ -222,13 +243,13 @@ html {
   position: fixed;
   z-index: 10;
 
-  transition: 0.5s ease-in-out;
+  transition: opacity var(--noVNC-motion);
 
   /* Edge misrenders animations wihthout this */
   transform: translateX(0);
 }
 :root.noVNC_connected #noVNC_control_bar_anchor.noVNC_idle {
-  opacity: 0.8;
+  opacity: 0.72;
 }
 #noVNC_control_bar_anchor.noVNC_right {
   left: auto;
@@ -238,18 +259,24 @@ html {
 #noVNC_control_bar {
   position: relative;
   left: -100%;
+  min-width: 58px;
+  box-sizing: border-box;
 
-  transition: 0.5s ease-in-out;
+  transition: left var(--noVNC-motion), box-shadow var(--noVNC-motion);
 
-  background-color: rgb(110, 132, 163);
-  border-radius: 0 10px 10px 0;
+  background: var(--noVNC-surface);
+  border: 1px solid var(--noVNC-border);
+  border-left: 0;
+  border-radius: 0 var(--noVNC-radius) var(--noVNC-radius) 0;
+  box-shadow: none;
+  backdrop-filter: blur(18px) saturate(1.15);
 
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none; /* Disable iOS image long-press popup */
 }
 #noVNC_control_bar.noVNC_open {
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--noVNC-shadow-md);
   left: 0;
 }
 #noVNC_control_bar::before {
@@ -260,14 +287,16 @@ html {
   height: 100%;
   width: 30px;
   left: -30px;
-  transition: box-shadow 0.5s ease-in-out;
+  transition: box-shadow var(--noVNC-motion);
 }
 #noVNC_control_bar.noVNC_open::before {
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 12px 0 32px rgba(0, 0, 0, 0.22);
 }
 .noVNC_right #noVNC_control_bar {
   left: 100%;
-  border-radius: 10px 0 0 10px;
+  border-left: 1px solid var(--noVNC-border);
+  border-right: 0;
+  border-radius: var(--noVNC-radius) 0 0 var(--noVNC-radius);
 }
 .noVNC_right #noVNC_control_bar.noVNC_open {
   left: 0;
@@ -278,27 +307,29 @@ html {
 
 #noVNC_control_bar_handle {
   position: absolute;
-  left: -15px;
+  left: -12px;
   top: 0;
   transform: translateY(35px);
-  width: calc(100% + 30px);
-  height: 50px;
+  width: calc(100% + 24px);
+  height: 54px;
   z-index: -1;
   cursor: pointer;
-  border-radius: 5px;
-  background-color: rgb(83, 99, 122);
+  border-radius: 0 var(--noVNC-radius) var(--noVNC-radius) 0;
+  background-color: rgba(22, 25, 27, 0.9);
   background-image: url("../images/handle_bg.svg");
   background-repeat: no-repeat;
   background-position: right;
-  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--noVNC-border);
+  border-left: 0;
+  box-shadow: var(--noVNC-shadow-sm);
 }
 #noVNC_control_bar_handle:after {
   content: "";
-  transition: transform 0.5s ease-in-out;
+  transition: transform var(--noVNC-motion);
   background: url("../images/handle.svg");
   position: absolute;
-  top: 22px; /* (50px-6px)/2 */
-  right: 5px;
+  top: 24px; /* (54px-6px)/2 */
+  right: 7px;
   width: 5px;
   height: 6px;
 }
@@ -310,9 +341,12 @@ html {
 }
 .noVNC_right #noVNC_control_bar_handle {
   background-position: left;
+  border-left: 0;
+  border-right: 1px solid var(--noVNC-border);
+  border-radius: var(--noVNC-radius) 0 0 var(--noVNC-radius);
 }
 .noVNC_right #noVNC_control_bar_handle:after {
-  left: 5px;
+  left: 7px;
   right: 0;
   transform: translateX(1px) rotate(180deg);
 }
@@ -342,12 +376,14 @@ html {
   max-height: 100vh; /* Chrome is buggy with 100% */
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 0 10px;
+  padding: 10px 9px;
+  scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  scrollbar-width: thin;
 }
 
 #noVNC_control_bar > .noVNC_scroll > * {
   display: block;
-  margin: 10px auto;
+  margin: 9px auto;
 }
 
 /* Control bar hint */
@@ -369,10 +405,11 @@ html {
 
   visibility: hidden;
   opacity: 0;
-  transition: 0.2s ease-in-out;
+  transition: var(--noVNC-motion);
   background: transparent;
-  box-shadow: 0 0 10px black, inset 0 0 10px 10px rgba(110, 132, 163, 0.8);
-  border-radius: 10px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.42),
+              inset 0 0 0 2px rgba(45, 212, 191, 0.48);
+  border-radius: var(--noVNC-radius);
   transition-delay: 0s;
 }
 #noVNC_control_bar_hint.noVNC_active {
@@ -387,27 +424,35 @@ html {
 
 /* Control bar buttons */
 #noVNC_control_bar .noVNC_button {
-  padding: 4px 4px;
+  box-sizing: border-box;
+  width: 38px;
+  height: 38px;
+  padding: 8px;
   vertical-align: middle;
-  border:1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  background-color: transparent;
-  background-image: unset; /* we don't want the gradiant from input.css */
+  border: 1px solid transparent;
+  border-radius: var(--noVNC-radius);
+  background-color: rgba(255, 255, 255, 0.06);
+  background-image: unset; /* we don't want the gradient from input.css */
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.22));
+  transition: background-color var(--noVNC-motion),
+              border-color var(--noVNC-motion),
+              transform var(--noVNC-motion),
+              opacity var(--noVNC-motion);
 }
 #noVNC_control_bar .noVNC_button.noVNC_selected {
-  border-color: rgba(0, 0, 0, 0.8);
-  background-color: rgba(0, 0, 0, 0.5);
+  border-color: rgba(45, 212, 191, 0.66);
+  background-color: rgba(45, 212, 191, 0.22);
 }
 #noVNC_control_bar .noVNC_button.noVNC_selected:not(:disabled):hover {
-  border-color: rgba(0, 0, 0, 0.4);
-  background-color: rgba(0, 0, 0, 0.2);
+  border-color: rgba(45, 212, 191, 0.82);
+  background-color: rgba(45, 212, 191, 0.28);
 }
 #noVNC_control_bar .noVNC_button:not(:disabled):hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 #noVNC_control_bar .noVNC_button:not(:disabled):active {
-  padding-top: 5px;
-  padding-bottom: 3px;
+  transform: translateY(1px) scale(0.98);
 }
 #noVNC_control_bar .noVNC_button.noVNC_hidden {
   display: none !important;
@@ -417,52 +462,57 @@ html {
  * intercepted, like they are when clicking on the remote screen. */
 @media (any-pointer: coarse) {
   #noVNC_control_bar .noVNC_button:not(:disabled):hover {
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.06);
   }
   #noVNC_control_bar .noVNC_button.noVNC_selected:not(:disabled):hover {
-    border-color: rgba(0, 0, 0, 0.8);
-    background-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(45, 212, 191, 0.66);
+    background-color: rgba(45, 212, 191, 0.22);
   }
 }
 
 
 /* Panels */
 .noVNC_panel {
-  transform: translateX(25px);
+  transform: translateX(24px) scale(0.98);
 
-  transition: 0.5s ease-in-out;
+  transition: transform var(--noVNC-motion),
+              opacity var(--noVNC-motion),
+              visibility var(--noVNC-motion);
 
   box-sizing: border-box; /* so max-width don't have to care about padding */
-  max-width: calc(100vw - 75px - 25px); /* minus left and right margins */
-  max-height: 100vh; /* Chrome is buggy with 100% */
+  min-width: min(300px, calc(100vw - 92px));
+  max-width: min(430px, calc(100vw - 92px)); /* minus toolbar and edge margins */
+  max-height: calc(100vh - 24px); /* Chrome is buggy with 100% */
   overflow-x: hidden;
   overflow-y: auto;
 
   visibility: hidden;
   opacity: 0;
 
-  padding: 15px;
+  padding: 16px;
 
-  background: #fff;
-  border-radius: 10px;
-  color: #000;
-  border: 2px solid #E0E0E0;
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  background: var(--noVNC-surface-elevated);
+  border-radius: var(--noVNC-radius);
+  color: var(--noVNC-text-strong);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow: var(--noVNC-shadow-md);
+  scrollbar-color: rgba(16, 24, 32, 0.28) transparent;
+  scrollbar-width: thin;
 }
 .noVNC_panel.noVNC_open {
   visibility: visible;
   opacity: 1;
-  transform: translateX(75px);
+  transform: translateX(72px) scale(1);
 }
 .noVNC_right .noVNC_vcenter {
   left: auto;
   right: 0;
 }
 .noVNC_right .noVNC_panel {
-  transform: translateX(-25px);
+  transform: translateX(-24px) scale(0.98);
 }
 .noVNC_right .noVNC_panel.noVNC_open {
-  transform: translateX(-75px);
+  transform: translateX(-72px) scale(1);
 }
 
 .noVNC_panel > * {
@@ -478,31 +528,43 @@ html {
 
 .noVNC_panel hr {
   border: none;
-  border-top: 1px solid rgb(192, 192, 192);
+  border-top: 1px solid rgba(16, 24, 32, 0.12);
 }
 
 .noVNC_panel label {
   display: block;
-  white-space: nowrap;
-  margin: 5px;
+  margin: 7px 0;
+  color: var(--noVNC-text-strong);
+  line-height: 1.35;
+}
+
+.noVNC_subheading {
+  color: var(--noVNC-text-muted);
+  line-height: 1.45;
+  margin: 8px 0;
 }
 
 .noVNC_panel li {
-  margin: 5px;
+  margin: 8px 0;
 }
 
 .noVNC_panel .noVNC_heading {
-  background-color: rgb(110, 132, 163);
-  border-radius: 5px;
-  padding: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #12312f, #17443e);
+  border-radius: var(--noVNC-radius);
+  padding: 9px 10px;
   /* Compensate for padding in image */
-  padding-right: 8px;
   color: white;
-  font-size: 20px;
+  font-size: 17px;
+  font-weight: 700;
   white-space: nowrap;
 }
 .noVNC_panel .noVNC_heading img {
-  vertical-align: bottom;
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
 }
 
 .noVNC_submit {
@@ -512,22 +574,24 @@ html {
 /* Expanders */
 .noVNC_expander {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--noVNC-text-strong);
+  font-weight: 650;
 }
 .noVNC_expander::before {
   content: url("../images/expander.svg");
   display: inline-block;
-  margin-right: 5px;
-  transition: 0.2s ease-in-out;
+  transition: transform var(--noVNC-motion);
 }
 .noVNC_expander.noVNC_open::before {
   transform: rotateZ(90deg);
 }
 .noVNC_expander ~ * {
-  margin: 5px;
-  margin-left: 10px;
-  padding: 5px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 5px;
+  margin: 8px 0 0 6px;
+  padding: 4px 0 4px 12px;
+  border-left: 2px solid rgba(15, 118, 110, 0.24);
 }
 .noVNC_expander:not(.noVNC_open) ~ * {
   display: none;
@@ -536,13 +600,17 @@ html {
 /* Control bar content */
 
 #noVNC_control_bar .noVNC_logo {
-  font-size: 13px;
+  font-size: 14px;
+  color: #f7fafc;
+  text-align: center;
+  text-shadow: none;
 }
 
 .noVNC_logo + hr {
     /* Remove all but top border */
     border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    width: 34px;
 }
 
 :root:not(.noVNC_connected) #noVNC_view_drag_button {
@@ -570,8 +638,9 @@ html {
 }
 
 #noVNC_modifiers {
-  background-color: rgb(92, 92, 92);
-  border: none;
+  min-width: unset;
+  background: rgba(22, 25, 27, 0.96);
+  border: 1px solid var(--noVNC-border);
   padding: 10px;
 }
 
@@ -610,7 +679,8 @@ html {
 }
 #noVNC_settings ul {
   list-style: none;
-  padding: 0px;
+  padding: 0;
+  margin: 0;
 }
 #noVNC_setting_port {
   width: 80px;
@@ -641,34 +711,44 @@ html {
 
 #noVNC_status {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+  top: 14px;
+  left: 50%;
+  width: auto;
+  max-width: min(620px, calc(100vw - 28px));
   z-index: 100;
-  transform: translateY(-100%);
+  transform: translate(-50%, -18px) scale(0.98);
 
   cursor: pointer;
 
-  transition: 0.5s ease-in-out;
+  transition: transform var(--noVNC-motion),
+              opacity var(--noVNC-motion),
+              visibility var(--noVNC-motion);
 
   visibility: hidden;
   opacity: 0;
 
-  padding: 5px;
+  box-sizing: border-box;
+  padding: 10px 16px;
 
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-content: center;
+  align-items: center;
+  gap: 8px;
 
-  line-height: 1.6;
+  line-height: 1.35;
   word-wrap: break-word;
+  overflow-wrap: anywhere;
   color: #fff;
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--noVNC-radius);
+  box-shadow: var(--noVNC-shadow-md);
+  backdrop-filter: blur(18px) saturate(1.15);
 }
 #noVNC_status.noVNC_open {
-  transform: translateY(0);
+  transform: translate(-50%, 0) scale(1);
   visibility: visible;
   opacity: 1;
 }
@@ -676,25 +756,25 @@ html {
 #noVNC_status::before {
   content: "";
   display: inline-block;
-  width: 25px;
-  height: 25px;
-  margin-right: 5px;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
 }
 
 #noVNC_status.noVNC_status_normal {
-  background: rgba(128,128,128,0.9);
+  background: rgba(22, 25, 27, 0.92);
 }
 #noVNC_status.noVNC_status_normal::before {
   content: url("../images/info.svg") " ";
 }
 #noVNC_status.noVNC_status_error {
-  background: rgba(200,55,55,0.9);
+  background: rgba(127, 29, 29, 0.92);
 }
 #noVNC_status.noVNC_status_error::before {
   content: url("../images/error.svg") " ";
 }
 #noVNC_status.noVNC_status_warn {
-  background: rgba(180,180,30,0.9);
+  background: rgba(146, 64, 14, 0.92);
 }
 #noVNC_status.noVNC_status_warn::before {
   content: url("../images/warning.svg") " ";
@@ -706,62 +786,74 @@ html {
  */
 
 #noVNC_connect_dlg {
-  transition: 0.5s ease-in-out;
+  box-sizing: border-box;
+  min-width: min(360px, calc(100vw - 32px));
+  padding: 22px;
+  border-radius: var(--noVNC-radius);
+  background: rgba(22, 25, 27, 0.92);
+  border: 1px solid var(--noVNC-border);
+  box-shadow: var(--noVNC-shadow-md);
+  backdrop-filter: blur(18px) saturate(1.12);
+  transition: transform var(--noVNC-motion),
+              opacity var(--noVNC-motion),
+              visibility var(--noVNC-motion);
 
-  transform: scale(0, 0);
+  transform: translateY(10px) scale(0.98);
   visibility: hidden;
   opacity: 0;
 }
 #noVNC_connect_dlg.noVNC_open {
-  transform: scale(1, 1);
+  transform: translateY(0) scale(1);
   visibility: visible;
   opacity: 1;
 }
 #noVNC_connect_dlg .noVNC_logo {
-  transition: 0.5s ease-in-out;
-  padding: 10px;
-  margin-bottom: 10px;
+  transition: color var(--noVNC-motion);
+  padding: 0;
+  margin: 0 0 18px;
 
-  font-size: 80px;
+  font-size: 58px;
   text-align: center;
 
-  border-radius: 5px;
+  border-radius: var(--noVNC-radius);
 }
 @media (max-width: 440px) {
   #noVNC_connect_dlg {
-    max-width: calc(100vw - 100px);
+    max-width: calc(100vw - 32px);
+    padding: 18px;
   }
   #noVNC_connect_dlg .noVNC_logo {
-    font-size: calc(25vw - 30px);
+    font-size: clamp(36px, 14vw, 54px);
   }
 }
 #noVNC_connect_dlg div {
-  padding: 12px;
+  padding: 0;
 
-  background-color: rgb(110, 132, 163);
-  border-radius: 12px;
+  background-color: transparent;
+  border-radius: 0;
   text-align: center;
   font-size: 20px;
 
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
 #noVNC_connect_button {
   width: 100%;
-  padding: 5px 30px;
+  padding: 12px 30px;
 
   cursor: pointer;
 
-  border-color: rgb(83, 99, 122);
-  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--noVNC-radius);
 
-  background: linear-gradient(to top, rgb(110, 132, 163), rgb(99, 119, 147));
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
   color: white;
+  box-shadow: 0 10px 24px rgba(20, 184, 166, 0.22);
 
   /* This avoids it jumping around when :active */
   vertical-align: middle;
 }
 #noVNC_connect_button:hover {
-  background: linear-gradient(to top, rgb(110, 132, 163), rgb(105, 125, 155));
+  background: linear-gradient(135deg, #0d9488, #2dd4bf);
 }
 
 #noVNC_connect_button img {
@@ -777,10 +869,10 @@ html {
 #noVNC_verify_server_dlg {
   position: relative;
 
-  transform: translateY(-50px);
+  transform: translateY(-18px) scale(0.98);
 }
 #noVNC_verify_server_dlg.noVNC_open {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 #noVNC_fingerprint_block {
   margin: 10px;
@@ -794,10 +886,10 @@ html {
 #noVNC_credentials_dlg {
   position: relative;
 
-  transform: translateY(-50px);
+  transform: translateY(-18px) scale(0.98);
 }
 #noVNC_credentials_dlg.noVNC_open {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 #noVNC_username_block.noVNC_hidden,
 #noVNC_password_block.noVNC_hidden {
@@ -812,7 +904,8 @@ html {
 
 /* Transition screen */
 #noVNC_transition {
-  transition: 0.5s ease-in-out;
+  transition: opacity var(--noVNC-motion),
+              visibility var(--noVNC-motion);
 
   display: flex;
   opacity: 0;
@@ -825,7 +918,8 @@ html {
   right: 0;
 
   color: white;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(10, 13, 15, 0.72);
+  backdrop-filter: blur(8px);
   z-index: 50;
 
   /*display: flex;*/
@@ -844,16 +938,20 @@ html {
   display: none;
 }
 #noVNC_transition_text {
-  font-size: 1.5em;
+  margin-bottom: 18px;
+  font-size: 1.35em;
+  font-weight: 700;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
 }
 
 /* Main container */
 #noVNC_container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
-  background-color: #313131;
-  border-bottom-right-radius: 800px 600px;
-  /*border-top-left-radius: 800px 600px;*/
+  background: #0f1113;
 
   /* If selection isn't disabled, long-pressing stuff in the sidebar
      can accidentally select the container or the canvas. This can
@@ -885,13 +983,15 @@ html {
 }
 
 .noVNC_logo {
-  color:yellow;
-  font-family: 'Orbitron', 'OrbitronTTF', sans-serif;
+  color: #f7fafc;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", sans-serif;
+  font-weight: 850;
   line-height: 0.9;
-  text-shadow: 0.1em 0.1em 0 black;
+  text-shadow: none;
 }
 .noVNC_logo span{
-  color:green;
+  color: var(--noVNC-accent);
 }
 
 #noVNC_bell {
@@ -904,19 +1004,52 @@ html {
  */
 
 @media screen and (max-width: 640px){
-  #noVNC_logo {
-    font-size: 150px;
+  #noVNC_control_bar .noVNC_button {
+    width: 42px;
+    height: 42px;
+    padding: 9px;
+  }
+
+  #noVNC_control_bar {
+    min-width: 62px;
+  }
+
+  .noVNC_panel {
+    min-width: min(300px, calc(100vw - 84px));
+    max-width: calc(100vw - 84px);
+    padding: 14px;
+  }
+
+  .noVNC_panel.noVNC_open {
+    transform: translateX(68px) scale(1);
+  }
+
+  .noVNC_right .noVNC_panel.noVNC_open {
+    transform: translateX(-68px) scale(1);
   }
 }
 
 @media screen and (min-width: 321px) and (max-width: 480px) {
-  #noVNC_logo {
-    font-size: 110px;
+  #noVNC_status {
+    top: 10px;
+    max-width: calc(100vw - 20px);
+    padding: 9px 12px;
   }
 }
 
 @media screen and (max-width: 320px) {
-  #noVNC_logo {
-    font-size: 90px;
+  #noVNC_connect_dlg .noVNC_logo {
+    font-size: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
   }
 }

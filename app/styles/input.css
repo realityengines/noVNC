@@ -16,12 +16,23 @@ input, input::file-selector-button, button, select, textarea {
   appearance: none;
   background: none;
 
-  padding: 5px;
-  border: 1px solid rgb(192, 192, 192);
-  border-radius: 5px;
-  color: black;
-  --bg-gradient: linear-gradient(to top, rgb(255, 255, 255) 80%, rgb(240, 240, 240));
-  background-image: var(--bg-gradient);
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid rgba(16, 24, 32, 0.18);
+  border-radius: var(--noVNC-radius, 8px);
+  color: var(--noVNC-text-strong, #101820);
+  background-color: #fff;
+  background-image: none;
+  transition: background-color var(--noVNC-motion, 180ms ease),
+              border-color var(--noVNC-motion, 180ms ease),
+              box-shadow var(--noVNC-motion, 180ms ease),
+              transform var(--noVNC-motion, 180ms ease),
+              opacity var(--noVNC-motion, 180ms ease);
+}
+
+textarea {
+  line-height: 1.45;
+  resize: vertical;
 }
 
 /*
@@ -35,17 +46,25 @@ input[type=submit],
 input::file-selector-button,
 button,
 select {
-  border-bottom-width: 2px;
-
-  /* This avoids it jumping around when :active */
+  min-height: 36px;
   vertical-align: middle;
   margin-top: 0;
 
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 14px;
+  padding-right: 14px;
 
   /* Disable Chrome's touch tap highlight */
   -webkit-tap-highlight-color: transparent;
+}
+
+input[type=button],
+input[type=reset],
+input[type=submit],
+input::file-selector-button,
+button {
+  cursor: pointer;
+  font-weight: 650;
+  background-color: #f8fafc;
 }
 
 /*
@@ -56,14 +75,13 @@ select {
       <svg width="8" height="6" version="1.1" viewBox="0 0 8 6" \
            xmlns="http://www.w3.org/2000/svg"> \
           <path d="m6.5 1.5 -2.5 3 -2.5 -3 5 0" stroke-width="3" \
-                stroke="rgb(31,31,31)" fill="none" \
+                stroke="rgb(16,24,32)" fill="none" \
                 stroke-linecap="round" stroke-linejoin="round" /> \
       </svg>');
-  background-image: var(--select-arrow), var(--bg-gradient);
-  background-position: calc(100% - 7px), left top;
+  background-image: var(--select-arrow);
+  background-position: calc(100% - 10px) center;
   background-repeat: no-repeat;
-  padding-right: calc(2*7px + 8px);
-  padding-left: 7px;
+  padding-right: 30px;
 }
 /* FIXME: :active isn't set when the <select> is opened in Firefox:
           https://bugzilla.mozilla.org/show_bug.cgi?id=1805406 */
@@ -73,9 +91,9 @@ select:active {
       <svg width="8" height="6" version="1.1" viewBox="0 0 8 6" \
            xmlns="http://www.w3.org/2000/svg" transform="rotate(180)" > \
           <path d="m6.5 1.5 -2.5 3 -2.5 -3 5 0" stroke-width="3" \
-                stroke="rgb(31,31,31)" fill="none" \
+                stroke="rgb(16,24,32)" fill="none" \
                 stroke-linecap="round" stroke-linejoin="round" /> \
-      </svg>'), var(--bg-gradient);
+      </svg>');
 }
 option {
   color: black;
@@ -91,24 +109,23 @@ input[type=checkbox] {
   align-items: center;
   background-color: white;
   background-image: unset;
-  border: 1px solid dimgrey;
-  border-radius: 3px;
-  width: 13px;
-  height: 13px;
+  border: 1px solid rgba(16, 24, 32, 0.32);
+  border-radius: 4px;
+  width: 16px;
+  height: 16px;
   padding: 0;
-  margin-right: 6px;
-  vertical-align: bottom;
-  transition: 0.2s background-color linear;
+  margin-right: 8px;
+  vertical-align: -3px;
 }
 input[type=checkbox]:checked {
-  background-color: rgb(110, 132, 163);
-  border-color: rgb(110, 132, 163);
+  background-color: var(--noVNC-accent-strong, #0f766e);
+  border-color: var(--noVNC-accent-strong, #0f766e);
 }
 input[type=checkbox]:checked::after {
   content: "";
   display: block; /* width & height doesn't work on inline elements */
-  width: 3px;
-  height: 7px;
+  width: 4px;
+  height: 8px;
   border: 1px solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(40deg) translateY(-1px);
@@ -119,15 +136,14 @@ input[type=checkbox]:checked::after {
  */
 input[type=radio] {
   border-radius: 50%;
-  border: 1px solid dimgrey;
-  width: 12px;
-  height: 12px;
+  border: 1px solid rgba(16, 24, 32, 0.32);
+  width: 16px;
+  height: 16px;
   padding: 0;
-  margin-right: 6px;
-  transition: 0.2s border linear;
+  margin-right: 8px;
 }
 input[type=radio]:checked {
-  border: 6px solid rgb(110, 132, 163);
+  border: 5px solid var(--noVNC-accent-strong, #0f766e);
 }
 
 /*
@@ -135,40 +151,41 @@ input[type=radio]:checked {
  */
 input[type=range] {
   border: unset;
-  border-radius: 3px;
-  height: 20px;
+  border-radius: 999px;
+  height: 26px;
   padding: 0;
   background: transparent;
 }
 /* -webkit-slider.. & -moz-range.. cant be in selector lists:
    https://bugs.chromium.org/p/chromium/issues/detail?id=1154623 */
 input[type=range]::-webkit-slider-runnable-track {
-  background-color: rgb(110, 132, 163);
+  background-color: rgba(16, 24, 32, 0.14);
   height: 6px;
-  border-radius: 3px;
+  border-radius: 999px;
 }
 input[type=range]::-moz-range-track {
-  background-color: rgb(110, 132, 163);
+  background-color: rgba(16, 24, 32, 0.14);
   height: 6px;
-  border-radius: 3px;
+  border-radius: 999px;
 }
 input[type=range]::-webkit-slider-thumb {
   appearance: none;
   width: 18px;
-  height: 20px;
-  border-radius: 5px;
-  background-color: white;
-  border: 1px solid dimgray;
-  margin-top: -7px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--noVNC-accent-strong, #0f766e);
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(16, 24, 32, 0.26);
+  margin-top: -6px;
 }
 input[type=range]::-moz-range-thumb {
   appearance: none;
   width: 18px;
-  height: 20px;
-  border-radius: 5px;
-  background-color: white;
-  border: 1px solid dimgray;
-  margin-top: -7px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--noVNC-accent-strong, #0f766e);
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(16, 24, 32, 0.26);
 }
 
 /*
@@ -192,13 +209,11 @@ input[type=reset]:hover,
 input[type=submit]:hover,
 input::file-selector-button:hover,
 button:hover {
-  background-image: linear-gradient(to top, rgb(255, 255, 255), rgb(250, 250, 250));
+  background-color: #eef3f7;
+  border-color: rgba(16, 24, 32, 0.28);
 }
 select:hover {
-  background-image: var(--select-arrow),
-    linear-gradient(to top, rgb(255, 255, 255), rgb(250, 250, 250));
-  background-position: calc(100% - 7px), left top;
-  background-repeat: no-repeat;
+  border-color: rgba(16, 24, 32, 0.28);
 }
 @media (any-pointer: coarse) {
   /* We don't want a hover style after touch input */
@@ -209,10 +224,11 @@ select:hover {
   input[type=submit]:hover,
   input::file-selector-button:hover,
   button:hover {
-    background-image: var(--bg-gradient);
+    background-color: #f8fafc;
+    border-color: rgba(16, 24, 32, 0.18);
   }
   select:hover {
-    background-image: var(--select-arrow), var(--bg-gradient);
+    border-color: rgba(16, 24, 32, 0.18);
   }
 }
 
@@ -227,8 +243,7 @@ input[type=submit]:active,
 input::file-selector-button:active,
 button:active,
 select:active {
-  border-bottom-width: 1px;
-  margin-top: 1px;
+  transform: translateY(1px);
 }
 
 /*
@@ -239,8 +254,9 @@ input:focus-visible::file-selector-button,
 button:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid rgb(74, 144, 217);
-  outline-offset: 1px;
+  outline: 3px solid rgba(45, 212, 191, 0.30);
+  outline-offset: 2px;
+  border-color: var(--noVNC-accent-strong, #0f766e);
 }
 input[type=file]:focus-visible {
   outline: none; /* We outline the button instead of the entire element */
@@ -254,7 +270,7 @@ input:disabled::file-selector-button,
 button:disabled,
 select:disabled,
 textarea:disabled {
-  opacity: 0.4;
+  opacity: 0.48;
 }
 input[type=button]:disabled,
 input[type=color]:disabled,
@@ -264,15 +280,14 @@ input[type=submit]:disabled,
 input:disabled::file-selector-button,
 button:disabled,
 select:disabled {
-  background-image: var(--bg-gradient);
-  border-bottom-width: 2px;
-  margin-top: 0;
+  background-color: #f8fafc;
+  transform: none;
 }
 input[type=file]:disabled {
   background-image: none;
 }
 select:disabled {
-  background-image: var(--select-arrow), var(--bg-gradient);
+  background-image: var(--select-arrow);
 }
 input[type=image]:disabled {
   /* See Firefox bug:
