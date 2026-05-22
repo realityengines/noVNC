@@ -17,6 +17,22 @@ function handleError(event, err) {
             return false;
         }
 
+        // Ignore errors from browser extensions (e.g. MetaMask, ad blockers).
+        // These are injected by the user's browser and are not noVNC errors.
+        const extensionPattern = /^(chrome|moz|safari)-extension:\/\//;
+        if (event.filename && extensionPattern.test(event.filename)) {
+            return false;
+        }
+        if (err && err.stack && extensionPattern.test(err.stack)) {
+            return false;
+        }
+        if (typeof event === 'string' && extensionPattern.test(event)) {
+            return false;
+        }
+        if (event.message && extensionPattern.test(event.message)) {
+            return false;
+        }
+
         // Only show the initial error
         if (msg.hasChildNodes()) {
             return false;
