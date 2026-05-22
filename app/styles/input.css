@@ -75,7 +75,7 @@ select {
       <svg width="10" height="6" version="1.1" viewBox="0 0 10 6" \
            xmlns="http://www.w3.org/2000/svg"> \
           <path d="M1 1.25 L5 4.75 L9 1.25" stroke-width="1.6" \
-                stroke="rgb(15,118,110)" fill="none" \
+                stroke="rgb(109,40,217)" fill="none" \
                 stroke-linecap="round" stroke-linejoin="round" /> \
       </svg>');
   background-image: var(--select-arrow);
@@ -91,7 +91,7 @@ select:active {
       <svg width="10" height="6" version="1.1" viewBox="0 0 10 6" \
            xmlns="http://www.w3.org/2000/svg" transform="rotate(180)"> \
           <path d="M1 1.25 L5 4.75 L9 1.25" stroke-width="1.6" \
-                stroke="rgb(15,118,110)" fill="none" \
+                stroke="rgb(109,40,217)" fill="none" \
                 stroke-linecap="round" stroke-linejoin="round" /> \
       </svg>');
 }
@@ -118,8 +118,8 @@ input[type=checkbox] {
   vertical-align: -3px;
 }
 input[type=checkbox]:checked {
-  background-color: var(--noVNC-accent-strong, #0f766e);
-  border-color: var(--noVNC-accent-strong, #0f766e);
+  background-color: var(--noVNC-accent-strong, #6d28d9);
+  border-color: var(--noVNC-accent-strong, #6d28d9);
 }
 input[type=checkbox]:checked::after {
   content: "";
@@ -143,7 +143,7 @@ input[type=radio] {
   margin-right: 8px;
 }
 input[type=radio]:checked {
-  border: 5px solid var(--noVNC-accent-strong, #0f766e);
+  border: 5px solid var(--noVNC-accent-strong, #6d28d9);
 }
 
 /*
@@ -173,7 +173,7 @@ input[type=range]::-webkit-slider-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background-color: var(--noVNC-accent-strong, #0f766e);
+  background-color: var(--noVNC-accent-strong, #6d28d9);
   border: 2px solid white;
   box-shadow: 0 2px 8px rgba(16, 24, 32, 0.26);
   margin-top: -6px;
@@ -183,7 +183,7 @@ input[type=range]::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background-color: var(--noVNC-accent-strong, #0f766e);
+  background-color: var(--noVNC-accent-strong, #6d28d9);
   border: 2px solid white;
   box-shadow: 0 2px 8px rgba(16, 24, 32, 0.26);
 }
@@ -254,9 +254,9 @@ input:focus-visible::file-selector-button,
 button:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid rgba(45, 212, 191, 0.30);
+  outline: 3px solid rgba(139, 92, 246, 0.34);
   outline-offset: 2px;
-  border-color: var(--noVNC-accent-strong, #0f766e);
+  border-color: var(--noVNC-accent-strong, #6d28d9);
 }
 input[type=file]:focus-visible {
   outline: none; /* We outline the button instead of the entire element */

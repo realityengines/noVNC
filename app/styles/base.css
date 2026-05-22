@@ -39,8 +39,8 @@
   --noVNC-text: #f7fafc;
   --noVNC-text-strong: #101820;
   --noVNC-text-muted: #5b6773;
-  --noVNC-accent: #2dd4bf;
-  --noVNC-accent-strong: #0f766e;
+  --noVNC-accent: #8b5cf6;
+  --noVNC-accent-strong: #6d28d9;
   --noVNC-success: #21c55d;
   --noVNC-warning: #d97706;
   --noVNC-error: #dc2626;
@@ -64,9 +64,9 @@ body {
   min-height: 100%;
   background-color: #0c0e10;
   background-image:
-    radial-gradient(1200px 600px at 18% 12%, rgba(45, 212, 191, 0.10), transparent 70%),
-    radial-gradient(900px 600px at 86% 88%, rgba(20, 184, 166, 0.07), transparent 65%),
-    radial-gradient(1600px 900px at 50% 120%, rgba(15, 118, 110, 0.10), transparent 70%);
+    radial-gradient(1200px 600px at 18% 12%, rgba(139, 92, 246, 0.12), transparent 70%),
+    radial-gradient(900px 600px at 86% 88%, rgba(124, 58, 237, 0.08), transparent 65%),
+    radial-gradient(1600px 900px at 50% 120%, rgba(109, 40, 217, 0.12), transparent 70%);
   background-attachment: fixed;
   color: var(--noVNC-text);
   touch-action: none;
@@ -92,7 +92,7 @@ body {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  box-shadow: -60px 10px 0 rgba(45, 212, 191, 0);
+  box-shadow: -60px 10px 0 rgba(139, 92, 246, 0);
   animation: noVNC_spinner 1.0s ease-in-out infinite;
 }
 .noVNC_spinner::before {
@@ -110,9 +110,9 @@ body {
   animation-delay: 0.1s;
 }
 @keyframes noVNC_spinner {
-  0% { box-shadow: -60px 10px 0 rgba(45, 212, 191, 0); width: 20px; }
-  25% { box-shadow: 20px 10px 0 rgba(45, 212, 191, 1); width: 10px; }
-  50% { box-shadow: 60px 10px 0 rgba(45, 212, 191, 0); width: 10px; }
+  0% { box-shadow: -60px 10px 0 rgba(139, 92, 246, 0); width: 20px; }
+  25% { box-shadow: 20px 10px 0 rgba(139, 92, 246, 1); width: 10px; }
+  50% { box-shadow: 60px 10px 0 rgba(139, 92, 246, 0); width: 10px; }
 }
 
 /* ----------------------------------------
@@ -426,7 +426,7 @@ body {
   transition: var(--noVNC-motion);
   background: transparent;
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.42),
-              inset 0 0 0 2px rgba(45, 212, 191, 0.48);
+              inset 0 0 0 2px rgba(139, 92, 246, 0.48);
   border-radius: var(--noVNC-radius);
   transition-delay: 0s;
 }
@@ -458,12 +458,12 @@ body {
               opacity var(--noVNC-motion);
 }
 #noVNC_control_bar .noVNC_button.noVNC_selected {
-  border-color: rgba(45, 212, 191, 0.66);
-  background-color: rgba(45, 212, 191, 0.22);
+  border-color: rgba(139, 92, 246, 0.66);
+  background-color: rgba(139, 92, 246, 0.22);
 }
 #noVNC_control_bar .noVNC_button.noVNC_selected:not(:disabled):hover {
-  border-color: rgba(45, 212, 191, 0.82);
-  background-color: rgba(45, 212, 191, 0.28);
+  border-color: rgba(139, 92, 246, 0.82);
+  background-color: rgba(139, 92, 246, 0.28);
 }
 #noVNC_control_bar .noVNC_button:not(:disabled):hover {
   background-color: rgba(255, 255, 255, 0.14);
@@ -483,8 +483,8 @@ body {
     background-color: rgba(255, 255, 255, 0.06);
   }
   #noVNC_control_bar .noVNC_button.noVNC_selected:not(:disabled):hover {
-    border-color: rgba(45, 212, 191, 0.66);
-    background-color: rgba(45, 212, 191, 0.22);
+    border-color: rgba(139, 92, 246, 0.66);
+    background-color: rgba(139, 92, 246, 0.22);
   }
 }
 
@@ -570,7 +570,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #12312f, #17443e);
+  background: linear-gradient(135deg, #2e1065, #4c1d95);
   border-radius: var(--noVNC-radius);
   padding: 9px 10px;
   /* Compensate for padding in image */
@@ -609,7 +609,7 @@ body {
 .noVNC_expander ~ * {
   margin: 8px 0 0 6px;
   padding: 4px 0 4px 12px;
-  border-left: 2px solid rgba(15, 118, 110, 0.24);
+  border-left: 2px solid rgba(109, 40, 217, 0.28);
 }
 .noVNC_expander:not(.noVNC_open) ~ * {
   display: none;
@@ -810,7 +810,7 @@ body {
   padding: 28px 26px 24px;
   border-radius: 14px;
   background:
-    linear-gradient(160deg, rgba(45, 212, 191, 0.10), rgba(22, 25, 27, 0) 55%),
+    linear-gradient(160deg, rgba(139, 92, 246, 0.12), rgba(22, 25, 27, 0) 55%),
     rgba(22, 25, 27, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow:
@@ -831,7 +831,7 @@ body {
   position: absolute;
   inset: -80px;
   z-index: -1;
-  background: radial-gradient(closest-side, rgba(45, 212, 191, 0.18), transparent 70%);
+  background: radial-gradient(closest-side, rgba(139, 92, 246, 0.22), transparent 70%);
   pointer-events: none;
   filter: blur(8px);
   opacity: 0;
@@ -897,10 +897,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 10px;
 
-  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  background: linear-gradient(135deg, #6d28d9, #8b5cf6);
   color: white;
   box-shadow:
-    0 10px 24px rgba(20, 184, 166, 0.22),
+    0 10px 24px rgba(124, 58, 237, 0.30),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
   transition: background var(--noVNC-motion),
               box-shadow var(--noVNC-motion),
@@ -910,9 +910,9 @@ body {
   vertical-align: middle;
 }
 #noVNC_connect_button:hover {
-  background: linear-gradient(135deg, #0d9488, #2dd4bf);
+  background: linear-gradient(135deg, #5b21b6, #a78bfa);
   box-shadow:
-    0 14px 30px rgba(20, 184, 166, 0.30),
+    0 14px 30px rgba(124, 58, 237, 0.40),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 #noVNC_connect_button:active {
@@ -1013,7 +1013,7 @@ body {
   position: absolute;
   inset: 0;
   background: radial-gradient(closest-side at 50% 45%,
-                              rgba(45, 212, 191, 0.10),
+                              rgba(139, 92, 246, 0.14),
                               transparent 70%);
   pointer-events: none;
 }
