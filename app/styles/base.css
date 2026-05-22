@@ -62,7 +62,12 @@ body {
   padding: 0;
   height: 100%;
   min-height: 100%;
-  background: #111416;
+  background-color: #0c0e10;
+  background-image:
+    radial-gradient(1200px 600px at 18% 12%, rgba(45, 212, 191, 0.10), transparent 70%),
+    radial-gradient(900px 600px at 86% 88%, rgba(20, 184, 166, 0.07), transparent 65%),
+    radial-gradient(1600px 900px at 50% 120%, rgba(15, 118, 110, 0.10), transparent 70%);
+  background-attachment: fixed;
   color: var(--noVNC-text);
   touch-action: none;
 }
@@ -264,12 +269,18 @@ body {
 
   transition: left var(--noVNC-motion), box-shadow var(--noVNC-motion);
 
-  background: var(--noVNC-surface);
+  /* NOTE: We intentionally do not use backdrop-filter here. It would
+     create a containing block for the position: fixed `.noVNC_vcenter`
+     panel wrappers nested inside the dock, which collapses their
+     height: 100% to the dock's own height and crops settings/clipboard
+     panels at small content sizes. */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)) ,
+    var(--noVNC-surface);
   border: 1px solid var(--noVNC-border);
   border-left: 0;
   border-radius: 0 var(--noVNC-radius) var(--noVNC-radius) 0;
   box-shadow: none;
-  backdrop-filter: blur(18px) saturate(1.15);
 
   user-select: none;
   -webkit-user-select: none;
@@ -307,51 +318,58 @@ body {
 
 #noVNC_control_bar_handle {
   position: absolute;
-  left: -12px;
-  top: 0;
-  transform: translateY(35px);
-  width: calc(100% + 24px);
-  height: 54px;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 56px;
   z-index: -1;
   cursor: pointer;
   border-radius: 0 var(--noVNC-radius) var(--noVNC-radius) 0;
-  background-color: rgba(22, 25, 27, 0.9);
-  background-image: url("../images/handle_bg.svg");
-  background-repeat: no-repeat;
-  background-position: right;
+  background: rgba(22, 25, 27, 0.92);
   border: 1px solid var(--noVNC-border);
   border-left: 0;
   box-shadow: var(--noVNC-shadow-sm);
+  transition: background-color var(--noVNC-motion),
+              border-color var(--noVNC-motion);
+}
+#noVNC_control_bar_handle:hover {
+  background: rgba(28, 32, 36, 0.96);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 #noVNC_control_bar_handle:after {
   content: "";
-  transition: transform var(--noVNC-motion);
-  background: url("../images/handle.svg");
   position: absolute;
-  top: 24px; /* (54px-6px)/2 */
-  right: 7px;
-  width: 5px;
+  top: 50%;
+  left: 50%;
+  width: 6px;
   height: 6px;
+  border-right: 2px solid rgba(255, 255, 255, 0.78);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.78);
+  transform: translate(-60%, -50%) rotate(-45deg);
+  transition: transform var(--noVNC-motion), border-color var(--noVNC-motion);
+}
+#noVNC_control_bar_handle:hover:after {
+  border-color: var(--noVNC-accent);
 }
 #noVNC_control_bar.noVNC_open #noVNC_control_bar_handle:after {
-  transform: translateX(1px) rotate(180deg);
+  transform: translate(-30%, -50%) rotate(135deg);
 }
 :root:not(.noVNC_connected) #noVNC_control_bar_handle {
   display: none;
 }
 .noVNC_right #noVNC_control_bar_handle {
-  background-position: left;
-  border-left: 0;
-  border-right: 1px solid var(--noVNC-border);
+  left: auto;
+  right: 100%;
+  border-left: 1px solid var(--noVNC-border);
+  border-right: 0;
   border-radius: var(--noVNC-radius) 0 0 var(--noVNC-radius);
 }
 .noVNC_right #noVNC_control_bar_handle:after {
-  left: 7px;
-  right: 0;
-  transform: translateX(1px) rotate(180deg);
+  transform: translate(-40%, -50%) rotate(135deg);
 }
 .noVNC_right #noVNC_control_bar.noVNC_open #noVNC_control_bar_handle:after {
-  transform: none;
+  transform: translate(-70%, -50%) rotate(-45deg);
 }
 /* Larger touch area for the handle, used when a touch screen is available */
 #noVNC_control_bar_handle div {
@@ -786,13 +804,18 @@ body {
  */
 
 #noVNC_connect_dlg {
+  position: relative;
   box-sizing: border-box;
-  min-width: min(360px, calc(100vw - 32px));
-  padding: 22px;
-  border-radius: var(--noVNC-radius);
-  background: rgba(22, 25, 27, 0.92);
-  border: 1px solid var(--noVNC-border);
-  box-shadow: var(--noVNC-shadow-md);
+  min-width: min(380px, calc(100vw - 32px));
+  padding: 28px 26px 24px;
+  border-radius: 14px;
+  background:
+    linear-gradient(160deg, rgba(45, 212, 191, 0.10), rgba(22, 25, 27, 0) 55%),
+    rgba(22, 25, 27, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    var(--noVNC-shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(18px) saturate(1.12);
   transition: transform var(--noVNC-motion),
               opacity var(--noVNC-motion),
@@ -802,6 +825,21 @@ body {
   visibility: hidden;
   opacity: 0;
 }
+#noVNC_connect_dlg::before {
+  /* Ambient glow behind the dialog */
+  content: "";
+  position: absolute;
+  inset: -80px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(45, 212, 191, 0.18), transparent 70%);
+  pointer-events: none;
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity calc(var(--noVNC-motion) * 2);
+}
+#noVNC_connect_dlg.noVNC_open::before {
+  opacity: 1;
+}
 #noVNC_connect_dlg.noVNC_open {
   transform: translateY(0) scale(1);
   visibility: visible;
@@ -810,12 +848,20 @@ body {
 #noVNC_connect_dlg .noVNC_logo {
   transition: color var(--noVNC-motion);
   padding: 0;
-  margin: 0 0 18px;
+  margin: 0 0 6px;
 
   font-size: 58px;
   text-align: center;
 
   border-radius: var(--noVNC-radius);
+}
+#noVNC_connect_dlg .noVNC_tagline {
+  margin: 0 0 22px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(247, 250, 252, 0.62);
 }
 @media (max-width: 440px) {
   #noVNC_connect_dlg {
@@ -837,28 +883,45 @@ body {
   box-shadow: none;
 }
 #noVNC_connect_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
-  padding: 12px 30px;
+  padding: 13px 30px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 
   cursor: pointer;
 
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: var(--noVNC-radius);
+  border-radius: 10px;
 
   background: linear-gradient(135deg, #0f766e, #14b8a6);
   color: white;
-  box-shadow: 0 10px 24px rgba(20, 184, 166, 0.22);
+  box-shadow:
+    0 10px 24px rgba(20, 184, 166, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: background var(--noVNC-motion),
+              box-shadow var(--noVNC-motion),
+              transform var(--noVNC-motion);
 
   /* This avoids it jumping around when :active */
   vertical-align: middle;
 }
 #noVNC_connect_button:hover {
   background: linear-gradient(135deg, #0d9488, #2dd4bf);
+  box-shadow:
+    0 14px 30px rgba(20, 184, 166, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+#noVNC_connect_button:active {
+  transform: translateY(1px);
 }
 
 #noVNC_connect_button img {
-  vertical-align: bottom;
-  height: 1.3em;
+  vertical-align: middle;
+  height: 1.25em;
 }
 
 /* ----------------------------------------
@@ -938,10 +1001,21 @@ body {
   display: none;
 }
 #noVNC_transition_text {
-  margin-bottom: 18px;
-  font-size: 1.35em;
-  font-weight: 700;
+  margin-bottom: 22px;
+  font-size: 1.25em;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  color: rgba(247, 250, 252, 0.92);
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+#noVNC_transition::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(closest-side at 50% 45%,
+                              rgba(45, 212, 191, 0.10),
+                              transparent 70%);
+  pointer-events: none;
 }
 
 /* Main container */
@@ -1026,6 +1100,17 @@ body {
 
   .noVNC_right .noVNC_panel.noVNC_open {
     transform: translateX(-68px) scale(1);
+  }
+
+  /* Reserve horizontal room for the dock on small screens so the dock does
+     not peek out behind centered dialogs (connect, credentials, verify). */
+  :root:not(.noVNC_connected) .noVNC_center {
+    padding: 0 76px;
+    box-sizing: border-box;
+  }
+  :root:not(.noVNC_connected) #noVNC_connect_dlg {
+    min-width: 0;
+    width: 100%;
   }
 }
 
