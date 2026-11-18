@@ -6,30 +6,36 @@
  * See README.md for usage and integration instructions.
  */
 
+// The overlay is for noVNC's own bugs: after one the page can't be trusted,
+// so it also blocks input. Code that browser extensions and corporate endpoint
+// agents (DLP, AI governance) inject into the page throws here too, attributed
+// to an extension URL or to the document itself, and says nothing about noVNC.
+// Only an error with a frame in one of our own modules opens the overlay.
+const ownScriptPrefixes = ['app/', 'core/'].map(dir => new URL(dir, location.href).href);
+
+function fromOwnScript(event, err) {
+    const locations = [];
+    if (event && typeof event.filename === 'string') {
+        locations.push(event.filename);
+    }
+    if (err && typeof err.stack === 'string') {
+        locations.push(err.stack);
+    }
+    return locations.some(text => ownScriptPrefixes.some(prefix => text.includes(prefix)));
+}
+
 // Fallback for all uncought errors
 function handleError(event, err) {
+    if (!fromOwnScript(event, err)) {
+        return false;
+    }
+
     try {
         const msg = document.getElementById('noVNC_fallback_errormsg');
 
         // Work around Firefox bug:
         // https://bugzilla.mozilla.org/show_bug.cgi?id=1685038
         if (event.message === "ResizeObserver loop completed with undelivered notifications.") {
-            return false;
-        }
-
-        // Ignore errors from browser extensions (e.g. MetaMask, ad blockers).
-        // These are injected by the user's browser and are not noVNC errors.
-        const extensionPattern = /^(chrome|moz|safari)-extension:\/\//;
-        if (event.filename && extensionPattern.test(event.filename)) {
-            return false;
-        }
-        if (err && err.stack && extensionPattern.test(err.stack)) {
-            return false;
-        }
-        if (typeof event === 'string' && extensionPattern.test(event)) {
-            return false;
-        }
-        if (event.message && extensionPattern.test(event.message)) {
             return false;
         }
 
